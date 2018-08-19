@@ -45,19 +45,37 @@ read -p "Setup Desktop theme? (Y/y)" -n 2 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 	# Ant-Bloody GTK theme
 	sudo git clone https://github.com/EliverLara/Ant-Bloody.git /usr/share/themes/Ant-Bloody/
+	gsettings set org.gnome.desktop.interface gtk-theme "Ant-Bloody"
+	gsettings set org.gnome.desktop.wm.preferences theme "Ant-Bloody"
 	
+	# mplus testflight font
+	#wget https://osdn.net/dl/mplus-fonts/mplus-TESTFLIGHT-063.tar.xz
+	#sudo tar xf mplus-TESTFLIGHT-063.tar.xz -C /usr/local/share/fonts/
+	# reload font cache
+	#sudo fc-cache -fv
+
 	# Paper Icon set
 	sudo add-apt-repository -u ppa:snwh/ppa
 	sudo apt-get install paper-icon-theme
+	sudo apt-get install papirus-icon-theme
 
+	#additional theme
+	# https://github.com/vinceliuice/Qogir-theme
 
 	echo "In Appearance -> Style:"
  	echo "  Widgets: 	Ant-Bloody"
-    	echo "  Icons:          Paper"
+    	echo "  Icons:          Paper/Papirus-dark"
     	echo "  Cursors:        Paper"
     	echo "  Dark theme:     Yes"
 
 	budgie-desktop-settings
+fi
+
+# install ulauncher
+read -p "install ulauncher? (Y/y)" -n 2 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+        sudo add-apt-repository -u ppa:agornostal/ulauncher
+	sudo apt-get install ulauncher
 fi
 
 # install AWS CLI 
@@ -77,6 +95,39 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 	sudo apt-get install sublime-text
 fi
 
+# install VS Code  
+read -p "install Visual Studio Code + Extensions? (Y/y)" -n 2 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+	sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+	sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+	sudo apt-get install apt-transport-https
+	sudo apt-get update
+	sudo apt-get install code # or code-insiders
+
+	# Extensions
+	code --install-extension equinusocio.vsc-material-theme
+	code --install-extension eamodio.gitlens
+	code --install-extension ms-python.python
+	code --install-extension rebornix.ruby
+fi
+
+# LibreOffice Fresh PPA  
+read -p "Add LibreOffice Fresh PPA? (Y/y)" -n 2 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+        sudo add-apt-repository ppa:libreoffice/ppa
+	sudo apt-get update
+	sudo apt-get install libreoffice
+fi
+
+
+# install LibreOffice Writer, Calc + Theme Integration 
+read -p "install LibreOffice Writer, Calc and Theme Integration? (Y/y)" -n 2 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+        #sudo apt-get install libreoffice-writer libreoffice-calc
+        sudo apt-get install libreoffice-gtk3 libreoffice-gtk
+fi
+
 
 # install python utils  
 read -p "install python utils? (Y/y)" -n 2 -r
@@ -85,4 +136,4 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 fi
 
 
-# vscode, aws config, bashrc, vimrc, python, ruby
+# aws config, bashrc, vimrc, python, ruby
